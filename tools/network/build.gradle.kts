@@ -1,8 +1,8 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
+//    alias(libs.plugins.ksp)
+    alias(libs.plugins.kapt)
     alias(libs.plugins.kotlin.compose)
 
 
@@ -20,17 +20,15 @@ android {
     }
 
     buildTypes {
+
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            consumerProguardFiles ("proguard-rules.pro")
         }
     }
-    buildFeatures{
-        compose = true
+    buildFeatures {
         buildConfig = true
+        compose = true
     }
     composeOptions{
         kotlinCompilerExtensionVersion ="1.5.15"
@@ -39,8 +37,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
+
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_21.toString()
+        jvmTarget = "21"
     }
 
     sourceSets.configureEach {
@@ -57,8 +56,9 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation(project(":tools:designSystem"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
 
@@ -80,6 +80,6 @@ dependencies {
 
     //di
     implementation(libs.hilt)
-    ksp(libs.hilt.compiler)
-
+//    ksp(libs.hilt.compiler)
+    kapt(libs.hilt.compiler)
 }

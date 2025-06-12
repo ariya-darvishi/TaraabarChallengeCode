@@ -2,7 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.ksp)
+//    alias(libs.plugins.ksp)
+    alias(libs.plugins.kapt)
     alias(libs.plugins.hilt)
 
 }
@@ -21,16 +22,30 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+
     buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+        debug {
+            buildConfigField("String", "TaraabarService", "\"TaraabarService\"")
+            buildConfigField(
+                "String",
+                "TaraabarServiceURL",
+                "\"https://taraabar-test.net/\""
             )
         }
+        release {
+
+            buildConfigField("String", "TaraabarService", "\"TaraabarService\"")
+            buildConfigField(
+                "String",
+                "TaraabarServiceURL",
+                "\"https://taraabar.net/\""
+            )
+            isMinifyEnabled = false
+        }
     }
+
     buildFeatures {
+        buildConfig = true
         compose = true
     }
     composeOptions {
@@ -44,9 +59,13 @@ android {
         jvmTarget = "21"
     }
 
-    sourceSets.configureEach {
-        kotlin.srcDir(layout.buildDirectory.dir("generated/ksp/$name/kotlin").get().asFile)
-    }
+//    sourceSets.configureEach {
+//        kotlin.srcDir(layout.buildDirectory.dir("generated/ksp/$name/kotlin").get().asFile)
+//    }
+//    ksp {
+//        arg("KSP_INCREMENTAL", "false")
+//        arg("KSP_LOG_LEVEL", "DEBUG")
+//    }
 }
 
 dependencies {
@@ -81,7 +100,8 @@ dependencies {
 
     //di
     implementation(libs.hilt)
-    ksp(libs.hilt.compiler)
+//    ksp(libs.hilt.compiler)
+    kapt(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
     //retrofit
@@ -96,3 +116,13 @@ dependencies {
 
 
 }
+//tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+//    kotlinOptions {
+//        freeCompilerArgs += listOf(
+//            "-P",
+//            "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${layout.buildDirectory.get().asFile.absolutePath}/compose_metrics",
+//            "-P",
+//            "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${layout.buildDirectory.get().asFile.absolutePath}/compose_metrics"
+//        )
+//    }
+//}
