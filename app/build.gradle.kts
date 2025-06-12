@@ -1,7 +1,9 @@
 plugins {
+    alias(libs.plugins.ksp)
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -27,15 +29,22 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = JavaVersion.VERSION_21.toString()
+        freeCompilerArgs = listOf(
+            "-Xstring-concat=inline"
+        )
     }
     buildFeatures {
+        buildConfig = true
         compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.15"
+    }
+
+    sourceSets.configureEach {
+        kotlin.srcDir(layout.buildDirectory.dir("generated/ksp/$name/kotlin").get().asFile)
     }
 }
 
@@ -56,4 +65,30 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation(libs.androidx.appcompat)
+
+
+    //shimmer
+    implementation(libs.compose.shimmer)
+
+    //nav
+    implementation(libs.compose.navigation)
+
+    //di
+    implementation(libs.hilt)
+    ksp(libs.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+
+    //retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.moshi.converter)
+    implementation(libs.okHttp.logger)
+
+    implementation(libs.moshi)
+
+    //coroutines
+    implementation(libs.coroutines)
+
+
 }
