@@ -4,37 +4,39 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import net.taraabar.challengecode.utils.ShipmentItemStatus
 import kotlin.random.Random
 
 
 @Stable
 @JsonClass(generateAdapter = true)
 data class ShipmentResponse(
-    @Json(name = "originProvince") val originProvince: String,
-    @Json(name = "originCity") val originCity: String,
-    @Json(name = "destinationProvince") val destinationProvince: String,
-    @Json(name = "destinationCity") val destinationCity: String,
-    @Json(name = "weight") val weight: String,
-    @Json(name = "weightUnit") val weightUnit: String,
-    @Json(name = "amount") val amount: String,
-    @Json(name = "amountUnit") val amountUnit: String,
-    @Json(name = "cargoType") val cargoType: String,
-    @Json(name = "packagingType") val packagingType: String,
-    @Json(name = "loadingDate") val loadingDate: String,
-    @Json(name = "shipmentDetail") val shipmentDetail: ShipmentDetail
+    @Json(name = "originProvince") val originProvince: String? = null,
+    @Json(name = "originCity") val originCity: String? = null,
+    @Json(name = "destinationProvince") val destinationProvince: String? = null,
+    @Json(name = "destinationCity") val destinationCity: String? = null,
+    @Json(name = "weight") val weight: String? = null,
+    @Json(name = "weightUnit") val weightUnit: String? = null,
+    @Json(name = "amount") val amount: String? = null,
+    @Json(name = "amountUnit") val amountUnit: String? = null,
+    @Json(name = "cargoType") val cargoType: String? = null,
+    @Json(name = "packagingType") val packagingType: String? = null,
+    @Json(name = "loadingDate") val loadingDate: String? = null,
+    @Json(name = "shipmentDetail") val shipmentDetail: ShipmentDetail? = null,
+    @Json(name = "itemStatus") val itemStatus: ShipmentItemStatus? = ShipmentItemStatus.NONE,
 )
 
 
 @Stable
 @JsonClass(generateAdapter = true)
 data class ShipmentDetail(
-    @Json(name = "originCity") val originCity: String,
-    @Json(name = "destinationCity") val destinationCity: String,
-    @Json(name = "weightUnit") val weightUnit: String,
-    @Json(name = "cargoType") val cargoType: String,
-    @Json(name = "packagingType") val packagingType: String,
-    @Json(name = "loadingDate") val loadingDate: String,
-    @Json(name = "amount") val amount: String,
+    @Json(name = "originCity") val originCity: String? = null,
+    @Json(name = "destinationCity") val destinationCity: String? = null,
+    @Json(name = "weightUnit") val weightUnit: String? = null,
+    @Json(name = "cargoType") val cargoType: String? = null,
+    @Json(name = "packagingType") val packagingType: String? = null,
+    @Json(name = "loadingDate") val loadingDate: String? = null,
+    @Json(name = "amount") val amount: String? = null,
 )
 
 
@@ -123,6 +125,7 @@ object ShipmentResponseListMockData {
                 cargoType = cargoType,
                 packagingType = packagingType,
                 loadingDate = loadingDate,
+                itemStatus = ShipmentItemStatus.NONE,
                 shipmentDetail = ShipmentDetail(
                     originCity = originCity,
                     destinationCity = destinationCity,
