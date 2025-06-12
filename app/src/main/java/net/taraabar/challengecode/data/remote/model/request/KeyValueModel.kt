@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import net.taraabar.challengecode.utils.CargoDetailItem
 
 @JsonClass(generateAdapter = true)
 data class KeyValueModel(
@@ -16,3 +17,13 @@ data class KeyValueModel(
 data class KeyValueModelList(
     val items: List<KeyValueModel>
 )
+
+object KeyValueModelListMockData {
+    val MOCK_DATA = KeyValueModelList(
+        listOf(
+            KeyValueModel(key = CargoDetailItem.ORIGIN_CITY.fieldName, value = "تهران"),
+            KeyValueModel(key = CargoDetailItem.DESTINATION_CITY.fieldName, value = "شیراز"),
+            KeyValueModel(key = CargoDetailItem.CARGO_TYPE.fieldName, value = "کفش"),
+        )
+    )
+}

@@ -4,13 +4,13 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import net.taraabar.challengecode.utils.ShipmentItemStatus
+import net.taraabar.challengecode.utils.CargoStatus
 import kotlin.random.Random
 
 
 @Stable
 @JsonClass(generateAdapter = true)
-data class ShipmentResponse(
+data class CargoResponse(
     @Json(name = "originProvince") val originProvince: String? = null,
     @Json(name = "originCity") val originCity: String? = null,
     @Json(name = "destinationProvince") val destinationProvince: String? = null,
@@ -22,14 +22,14 @@ data class ShipmentResponse(
     @Json(name = "cargoType") val cargoType: String? = null,
     @Json(name = "packagingType") val packagingType: String? = null,
     @Json(name = "loadingDate") val loadingDate: String? = null,
-    @Json(name = "shipmentDetail") val shipmentDetail: ShipmentDetail? = null,
-    @Json(name = "itemStatus") val itemStatus: ShipmentItemStatus? = ShipmentItemStatus.NONE,
+    @Json(name = "shipmentDetail") val cargoDetail: CargoDetail? = null,
+    @Json(name = "itemStatus") val itemStatus: CargoStatus? = CargoStatus.NONE,
 )
 
 
 @Stable
 @JsonClass(generateAdapter = true)
-data class ShipmentDetail(
+data class CargoDetail(
     @Json(name = "originCity") val originCity: String? = null,
     @Json(name = "destinationCity") val destinationCity: String? = null,
     @Json(name = "weightUnit") val weightUnit: String? = null,
@@ -42,8 +42,8 @@ data class ShipmentDetail(
 
 @Stable
 @Immutable
-data class ShipmentResponseList(
-    val items: List<ShipmentResponse>
+data class CargoResponseList(
+    val items: List<CargoResponse>
 )
 
 
@@ -82,7 +82,7 @@ val provincesAndCapitals = listOf(
 )
 
 
-object ShipmentResponseListMockData {
+object CargoResponseListMockData {
     private val cargoType = listOf(
         "برنج",
         "شیشه",
@@ -102,7 +102,7 @@ object ShipmentResponseListMockData {
     private val loadingDate = "۱۴۰۴-۰۳-${(10..30).random()}"
     private val amount = (500_000..5_000_000).random().toString()
 
-    val MOCK_DATA = ShipmentResponseList(
+    val MOCK_DATA = CargoResponseList(
         items = List(Random.nextInt(60, 210)) {
             val (originProvince, originCity) = provincesAndCapitals.random()
             var (destinationProvince, destinationCity) = provincesAndCapitals.random()
@@ -113,7 +113,7 @@ object ShipmentResponseListMockData {
                 destinationCity = provincesAndCapitals.random().second
             }
 
-            ShipmentResponse(
+            CargoResponse(
                 originProvince = originProvince,
                 originCity = originCity,
                 destinationProvince = destinationProvince,
@@ -125,8 +125,8 @@ object ShipmentResponseListMockData {
                 cargoType = cargoType,
                 packagingType = packagingType,
                 loadingDate = loadingDate,
-                itemStatus = ShipmentItemStatus.NONE,
-                shipmentDetail = ShipmentDetail(
+                itemStatus = CargoStatus.NONE,
+                cargoDetail = CargoDetail(
                     originCity = originCity,
                     destinationCity = destinationCity,
                     weightUnit = weightUnits,
