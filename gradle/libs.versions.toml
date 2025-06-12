@@ -19,7 +19,6 @@ hilt = "2.52"
 okhttp = "4.12.0"
 navihation-compose = "2.9.0"
 appcompat = "1.7.1"
-material = "1.10.0"
 
 
 [libraries]
@@ -52,7 +51,6 @@ moshi-adapters = { group = "com.squareup.moshi", name = "moshi-adapters", versio
 coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 #ksp = { module = "com.google.devtools.ksp:symbol-processing", version.ref = "ksp" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

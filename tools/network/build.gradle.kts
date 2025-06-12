@@ -1,24 +1,22 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.compose)
+
 
 }
 
 android {
-    namespace = "net.taraabar.challengecode"
+    namespace = "net.taraabar.network"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "net.taraabar.challengecode"
         minSdk = 31
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -30,69 +28,58 @@ android {
             )
         }
     }
-    buildFeatures {
+    buildFeatures{
         compose = true
+        buildConfig = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.15"
+    composeOptions{
+        kotlinCompilerExtensionVersion ="1.5.15"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
     kotlinOptions {
-        jvmTarget = "21"
+        jvmTarget = JavaVersion.VERSION_21.toString()
     }
 
     sourceSets.configureEach {
         kotlin.srcDir(layout.buildDirectory.dir("generated/ksp/$name/kotlin").get().asFile)
     }
+
 }
 
 dependencies {
 
-    implementation(project(":tools:designSystem"))
-    implementation(project(":tools:network"))
-
-
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.appcompat)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
 
+    implementation(project(":tools:designSystem"))
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
 
-    //shimmer
-    implementation(libs.compose.shimmer)
+    implementation(platform(libs.androidx.compose.bom))
 
-    //navigation
-    implementation(libs.compose.navigation)
+    //coroutines
+    implementation(libs.coroutines)
 
-    //di
-    implementation(libs.hilt)
-    ksp(libs.hilt.compiler)
-    implementation(libs.androidx.hilt.navigation.compose)
 
     //retrofit
     implementation(libs.retrofit)
     implementation(libs.retrofit.moshi.converter)
     implementation(libs.okHttp.logger)
 
+    //moshi
     implementation(libs.moshi)
+    implementation(libs.moshi.adapters)
 
-    //coroutines
-    implementation(libs.coroutines)
 
+    //di
+    implementation(libs.hilt)
+    ksp(libs.hilt.compiler)
 
 }

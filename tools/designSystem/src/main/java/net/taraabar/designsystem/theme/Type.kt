@@ -1,4 +1,4 @@
-package net.taraabar.challengecode.ui.theme
+package net.taraabar.designsystem.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

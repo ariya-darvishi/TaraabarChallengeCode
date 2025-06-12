@@ -1,4 +1,4 @@
-package net.taraabar.challengecode.ui.theme
+package net.taraabar.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 
