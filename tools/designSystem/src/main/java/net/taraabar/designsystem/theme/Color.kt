@@ -20,3 +20,4 @@ val Neutral_900 = Color(0xFF1A1A1A) // toolbar
 val error = Color(0xFFDD0000)
 val gray = Color(0xFFDFE1E5) // selected layout
 val primary = Color(0xFFFF7A00) // selected layout
+val background = Color(0xFFF2F2F2) // selected layout

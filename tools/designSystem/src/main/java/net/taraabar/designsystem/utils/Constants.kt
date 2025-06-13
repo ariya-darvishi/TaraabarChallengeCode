@@ -1,4 +1,4 @@
-package net.taraabar.challengecode.utils
+package net.taraabar.designsystem.utils
 
 
 const val CARGO_DETAIL = "جزئیات بار"
@@ -8,7 +8,10 @@ const val DESTINATION = "مقصد"
 const val WEIGHT = "وزن"
 const val CARGO = "بار"
 const val PACKAGING = "بسته بندی"
-const val LOADING_DATEـ_TIME = "تاریخ بارگیری"
+const val LOADING_DATE_TIME = "تاریخ بارگیری"
+const val CARGO_LIST = "لیست بارها"
+const val PAGE_MAX_SIZE = 10
+const val CANCEL_CARGO = "لغو بار"
 
 
 

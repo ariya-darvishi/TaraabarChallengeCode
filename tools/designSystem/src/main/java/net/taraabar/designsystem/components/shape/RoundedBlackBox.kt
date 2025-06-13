@@ -1,4 +1,4 @@
-package net.taraabar.designsystem.components.text
+package net.taraabar.designsystem.components.shape
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

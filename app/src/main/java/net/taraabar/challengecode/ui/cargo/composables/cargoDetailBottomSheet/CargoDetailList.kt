@@ -25,14 +25,12 @@ fun CargoDetailList(
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         if (isLoading) {
-            repeat(6) {
-                ShimmerCargoListItem(
-                    showLine = true,
-                )
+            repeat(5) {
+                ShimmerCargoDetailListItem()
             }
         } else {
             list.items.forEachIndexed() { index, item ->
-                CargoListItem(
+                CargoDetailListItem(
                     item = item,
                     showLine = if (index != list.items.size - 1) true else false,
                 )
@@ -57,7 +55,7 @@ fun CargoDetailListPreView() {
 
 @Preview(showBackground = true, heightDp = 600)
 @Composable
-fun IpListPreView_IsLoading_TRUE() {
+fun CargoDetailListPreView_IsLoading_TRUE() {
     TaraabarChallengeCodeTheme {
         CargoDetailList(
             list = KeyValueModelListMockData.MOCK_DATA,

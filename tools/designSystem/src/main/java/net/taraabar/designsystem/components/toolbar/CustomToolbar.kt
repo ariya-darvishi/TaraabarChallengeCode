@@ -28,6 +28,7 @@ import net.taraabar.designsystem.components.icon.ClickableIconWithRippleShape
 import net.taraabar.designsystem.components.icon.DefaultClickableIcon
 import net.taraabar.designsystem.theme.Neutral_900
 import net.taraabar.designsystem.theme.TaraabarChallengeCodeTheme
+import net.taraabar.designsystem.theme.getFontFamilyYekanBakh
 
 
 @Composable
@@ -69,21 +70,10 @@ fun CustomToolbar(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End
-        ) {
-            trailingIcon?.let {
-                it.invoke()
-                Spacer(modifier = Modifier.width(14.dp))
-            }
-
-            ClickableIconWithRippleShape(
-                onClick = onBackClick,
-                icon = { DefaultClickableIcon(R.drawable.ic_message_question) }
-            )
-
+        trailingIcon?.let {
+            it.invoke()
         }
+
     }
 }
 
@@ -109,8 +99,15 @@ fun CustomToolbarPreview() {
                     style = MaterialTheme.typography.labelMedium,
                     lineHeight = 16.sp,
                     color = Neutral_900,
+                    fontFamily = getFontFamilyYekanBakh()
                 )
             },
+            trailingIcon = {
+                ClickableIconWithRippleShape(
+                    onClick = {},
+                    icon = { DefaultClickableIcon(R.drawable.ic_message_question) }
+                )
+            }
         )
     }
 }

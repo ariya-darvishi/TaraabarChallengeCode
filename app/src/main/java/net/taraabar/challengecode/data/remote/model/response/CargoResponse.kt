@@ -100,10 +100,12 @@ object CargoResponseListMockData {
     private val weightUnits = listOf("کیلوگرم", "تن").random()
     private val packagingType = listOf("کارتن", "پالت", "کانتینر").random()
     private val loadingDate = "۱۴۰۴-۰۳-${(10..30).random()}"
-    private val amount = (500_000..5_000_000).random().toString()
 
     val MOCK_DATA = CargoResponseList(
         items = List(Random.nextInt(60, 210)) {
+            val amount = (500_000..5_000_000).random().toString()
+
+
             val (originProvince, originCity) = provincesAndCapitals.random()
             var (destinationProvince, destinationCity) = provincesAndCapitals.random()
 

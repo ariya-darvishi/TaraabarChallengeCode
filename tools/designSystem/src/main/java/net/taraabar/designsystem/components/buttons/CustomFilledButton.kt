@@ -29,6 +29,7 @@ import com.valentinilk.shimmer.rememberShimmer
 import com.valentinilk.shimmer.shimmer
 import net.taraabar.designsystem.components.loading.shimmerTheme
 import net.taraabar.designsystem.theme.TaraabarChallengeCodeTheme
+import net.taraabar.designsystem.theme.getFontFamilyYekanBakh
 import net.taraabar.designsystem.theme.gray
 
 
@@ -111,6 +112,7 @@ fun ButtonPreview() {
                     lineHeight = 16.sp,
                     style = MaterialTheme.typography.labelMedium,
                     textAlign = TextAlign.Center,
+                    fontFamily = getFontFamilyYekanBakh()
                 )
             }
         )

@@ -1,10 +1,11 @@
 package net.taraabar.challengecode.ui.cargo.composables.cargoDetailBottomSheet
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -24,10 +25,11 @@ import net.taraabar.designsystem.components.divider.LinearDivider
 import net.taraabar.designsystem.components.loading.ShimmerBox
 import net.taraabar.designsystem.components.loading.shimmerTheme
 import net.taraabar.designsystem.theme.TaraabarChallengeCodeTheme
+import net.taraabar.designsystem.theme.getFontFamilyYekanBakh
 
 
 @Composable
-fun CargoListItem(
+fun CargoDetailListItem(
     item: KeyValueModel,
     showLine: Boolean = true,
 ) {
@@ -43,6 +45,7 @@ fun CargoListItem(
             text = "${item.key}: ",
             color = MaterialTheme.colorScheme.onSecondaryContainer,
             textAlign = TextAlign.Start,
+            fontFamily = getFontFamilyYekanBakh(),
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -51,6 +54,7 @@ fun CargoListItem(
             text = item.value,
             color = MaterialTheme.colorScheme.onSecondaryContainer,
             textAlign = TextAlign.Start,
+            fontFamily = getFontFamilyYekanBakh()
         )
 
     }
@@ -66,58 +70,55 @@ fun CargoListItem(
 
 
 @Composable
-fun ShimmerCargoListItem(
-    showLine: Boolean = true,
-) {
+fun ShimmerCargoDetailListItem() {
     val shimmerInstance =
         rememberShimmer(shimmerBounds = ShimmerBounds.Window, theme = shimmerTheme())
 
-
-    Row(
+    Column(
         modifier = Modifier
-            .shimmer(shimmerInstance)
             .fillMaxWidth()
-            .padding(12.dp)
-            .background(MaterialTheme.colorScheme.background),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+            .shimmer(shimmerInstance)
+            .padding(vertical = 8.dp)
     ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            ShimmerBox(height = 18.dp, width = 50.dp)
+            Spacer(modifier = Modifier.weight(1f))
+            ShimmerBox(height = 18.dp, width = 50.dp)
 
-        ShimmerBox(height = 20.dp, width = 50.dp)
+        }
+        Spacer(modifier = Modifier.height(5.dp))
 
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        ShimmerBox(height = 20.dp, width = 50.dp)
-
-
-    }
-    if (showLine)
         LinearDivider(
             thickness = 1.dp,
             color = Color.Black.copy(alpha = 0.1f),
             modifier = Modifier.padding(vertical = 5.dp)
         )
+        Spacer(modifier = Modifier.height(5.dp))
 
-    ShimmerBox(height = 20.dp, width = 50.dp)
+    }
 }
 
 
 @Preview(showBackground = true, heightDp = 50)
 @Composable
-fun CargoListItemPreView() {
+fun CargoDetailListItemPreView() {
     TaraabarChallengeCodeTheme {
-        CargoListItem(
+        CargoDetailListItem(
             item = KeyValueModelListMockData.MOCK_DATA.items.first(),
         )
     }
 }
 
 
-@Preview(showBackground = true, heightDp = 50)
+@Preview(showBackground = true, heightDp = 250)
 @Composable
-fun CargoListItemPreView_Loading_TRUE() {
+fun CargoDetailListItemPreView_Loading_TRUE() {
     TaraabarChallengeCodeTheme {
-        ShimmerCargoListItem()
+        ShimmerCargoDetailListItem()
     }
 }

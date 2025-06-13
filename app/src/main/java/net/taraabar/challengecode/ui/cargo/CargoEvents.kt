@@ -8,6 +8,7 @@ interface CargoEvents {
     fun onCargoItemClick(item: CargoResponse)
     fun onAcceptCargoBtnClick()
     fun onCancelCargoTextBtnClick()
+    fun loadMore()
 }
 
 val defaultCargoEvents = object : CargoEvents {
@@ -16,4 +17,5 @@ val defaultCargoEvents = object : CargoEvents {
     override fun onCargoItemClick(item: CargoResponse) {}
     override fun onAcceptCargoBtnClick() {}
     override fun onCancelCargoTextBtnClick() {}
+    override fun loadMore() {}
 }

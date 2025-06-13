@@ -24,8 +24,7 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
-            MainActivityContent(
-            )
+            MainActivityContent()
         }
     }
 }
@@ -43,7 +42,7 @@ fun MainActivityContent() {
                 navHostController = navController,
                 modifier = Modifier.fillMaxSize(),
 
-                )
+            )
         }
     }
 }

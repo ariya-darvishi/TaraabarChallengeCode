@@ -17,5 +17,7 @@ data class CargoStateHolder(
     val isLoadingCargoList: StateFlow<Boolean>,
     val isLoadingCargoItemDetail: StateFlow<Boolean>,
     val showCargoDetailBottomSheet: StateFlow<Boolean>,
+    val isLoadingData: StateFlow<Boolean>,
+    val hasMoreData: StateFlow<Boolean>,
 
     )

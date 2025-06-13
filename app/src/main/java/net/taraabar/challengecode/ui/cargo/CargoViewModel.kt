@@ -13,6 +13,7 @@ import net.taraabar.challengecode.data.remote.model.response.CargoResponse
 import net.taraabar.challengecode.data.remote.model.response.CargoResponseList
 import net.taraabar.challengecode.data.repository.ITaraabarRepository
 import net.taraabar.challengecode.utils.CargoStatus
+import net.taraabar.designsystem.utils.PAGE_MAX_SIZE
 import net.taraabar.challengecode.utils.updateSelectionStatus
 import net.taraabar.network.states.apiResultCollector
 import javax.inject.Inject
@@ -30,12 +31,18 @@ class CargoViewModel @Inject constructor(
     private val _isLoadingCargoDetail = MutableStateFlow(false)
     private val _showCargoDetailBottomSheet = MutableStateFlow(false)
 
+    private var _isLoadingData = MutableStateFlow(false)
+    private var _hasMoreData = MutableStateFlow(true)
+
+
     val states = CargoStateHolder(
         cargoList = _cargoList.asStateFlow(),
         currentCargoSelected = _currentCargoSelected.asStateFlow(),
         isLoadingCargoList = _isLoadingCargoList.asStateFlow(),
         isLoadingCargoItemDetail = _isLoadingCargoDetail.asStateFlow(),
         showCargoDetailBottomSheet = _showCargoDetailBottomSheet.asStateFlow(),
+        isLoadingData = _isLoadingData.asStateFlow(),
+        hasMoreData = _hasMoreData.asStateFlow(),
     )
 
     val events = object : CargoEvents {
@@ -43,7 +50,7 @@ class CargoViewModel @Inject constructor(
         override fun initCargoScreen() {
             viewModelScope.launch {
                 _isLoadingCargoList.value = true
-                delay(1000)
+                delay(2000)
                 getShipmentList()
             }
 
@@ -54,7 +61,7 @@ class CargoViewModel @Inject constructor(
             _showCargoDetailBottomSheet.value = true
             viewModelScope.launch {
                 _isLoadingCargoDetail.value = true
-                delay(1000)
+                delay(2000)
                 _isLoadingCargoDetail.value = false
 
             }
@@ -90,17 +97,28 @@ class CargoViewModel @Inject constructor(
 
         }
 
+        override fun loadMore() {
+            getShipmentList()
+        }
+
     }
 
 
     fun getShipmentList() {
+        if (_isLoadingData.value || !_hasMoreData.value) return
+
         viewModelScope.launch {
+            _isLoadingData.value = true
             repository.getMockCargoList()
-                .apiResultCollector(states.getCargoListApiCallState) {
-                    _cargoList.value = CargoResponseList(it)
-                    _isLoadingCargoList.value = false
+                .apiResultCollector(states.getCargoListApiCallState) { newData ->
+                    if (newData.isEmpty() || newData.size < PAGE_MAX_SIZE) {
+                        _hasMoreData.value = false
+                    }
+                    _cargoList.value = CargoResponseList(_cargoList.value.items + newData)
+                    _isLoadingData.value = false
                 }
         }
+
     }
 
 

@@ -1,5 +1,12 @@
 package net.taraabar.challengecode.utils
 
+import net.taraabar.designsystem.utils.CARGO
+import net.taraabar.designsystem.utils.DESTINATION
+import net.taraabar.designsystem.utils.LOADING_DATE_TIME
+import net.taraabar.designsystem.utils.ORIGIN
+import net.taraabar.designsystem.utils.PACKAGING
+import net.taraabar.designsystem.utils.WEIGHT
+
 
 enum class CargoStatus {
     NONE,
@@ -13,5 +20,5 @@ enum class CargoDetailItem(val fieldName: String) {
     WEIGHT_UNIT(fieldName = WEIGHT),
     CARGO_TYPE(fieldName = CARGO),
     PACKAGING_TYPE(fieldName = PACKAGING),
-    LOADING_DATE(fieldName = LOADING_DATEـ_TIME),
+    LOADING_DATE(fieldName = LOADING_DATE_TIME),
 }

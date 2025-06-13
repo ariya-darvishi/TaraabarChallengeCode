@@ -2,8 +2,10 @@ package net.taraabar.designsystem.components.divider
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.VerticalDivider
@@ -39,8 +41,8 @@ fun LinearDivider(
                 VerticalDivider(
                     modifier = Modifier
                         .background(color)
-                        .fillMaxWidth()
-                        .height(1.dp),
+                        .fillMaxHeight()
+                        .width(1.dp),
                     color = color,
                     thickness = thickness
                 )
