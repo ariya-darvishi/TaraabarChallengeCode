@@ -109,8 +109,7 @@ object CargoResponseListMockData {
             val (originProvince, originCity) = provincesAndCapitals.random()
             var (destinationProvince, destinationCity) = provincesAndCapitals.random()
 
-            //  استان و شهر مبدا با استان و شهر مقصد متفاوت باشند
-            while (originProvince == destinationProvince || originCity == destinationCity) {
+            while (originProvince == destinationProvince || originCity == destinationCity) {// استان و شهر مقصد و مبدا با هم یکی نباشن
                 destinationProvince = provincesAndCapitals.random().first
                 destinationCity = provincesAndCapitals.random().second
             }
