@@ -12,6 +12,8 @@ import net.taraabar.network.states.ApiCallState
 @Immutable
 data class CargoStateHolder(
     val cargoList: StateFlow<CargoResponseList>,
+    val fullList: StateFlow<CargoResponseList>,
+    val currentLoadedList: StateFlow<CargoResponseList>,
     val currentCargoSelected: StateFlow<CargoResponse?>,
     val getCargoListApiCallState: ApiCallState = ApiCallState(),
     val isLoadingCargoList: StateFlow<Boolean>,
@@ -20,4 +22,4 @@ data class CargoStateHolder(
     val isLoadingData: StateFlow<Boolean>,
     val hasMoreData: StateFlow<Boolean>,
 
-    )
+)

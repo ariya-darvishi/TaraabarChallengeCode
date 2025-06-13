@@ -1,5 +1,6 @@
 package net.taraabar.challengecode.ui.cargo.composables
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -23,9 +24,7 @@ import kotlinx.coroutines.flow.filter
 import net.taraabar.challengecode.data.remote.model.response.CargoResponse
 import net.taraabar.challengecode.data.remote.model.response.CargoResponseList
 import net.taraabar.challengecode.data.remote.model.response.CargoResponseListMockData
-import net.taraabar.designsystem.utils.PAGE_MAX_SIZE
 import net.taraabar.designsystem.theme.TaraabarChallengeCodeTheme
-
 
 @OptIn(FlowPreview::class)
 @Composable
@@ -33,60 +32,69 @@ fun CargoList(
     list: CargoResponseList,
     isLoading: Boolean,
     hasMoreData: Boolean,
-    onClick: (CargoResponse) -> Unit,
+    onItemClick: (CargoResponse) -> Unit,
     onCancelCargoTextBtnClick: () -> Unit,
     loadMoreItems: () -> Unit,
 ) {
     val listState: LazyListState = rememberLazyListState()
     val buffer = 3
 
+    LazyColumn(
+        state = listState,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(20.dp)
+            .wrapContentHeight(),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        items(list.items, key = { it.amount.orEmpty() }) { item ->
+            CargoListItem(
+                item = item,
+                onItemClick = onItemClick,
+                onCancelCargoTextBtnClick = onCancelCargoTextBtnClick
+            )
+        }
+
+        if (isLoading) {
+            items(5) {
+                ShimmerCargoListItem()
+            }
+        }
+    }
+
     val shouldLoadMore = remember {
         derivedStateOf {
-            val totalItemsCount = listState.layoutInfo.totalItemsCount
-            if (totalItemsCount < PAGE_MAX_SIZE || !hasMoreData)
-                false
-            else {
-                val lastVisibleItemIndex =
-                    listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
-                lastVisibleItemIndex >= (totalItemsCount - buffer) && !isLoading
+            if (!hasMoreData || isLoading) {
+                Log.d(
+                    "CargoList",
+                    "shouldLoadMore: false (hasMoreData=$hasMoreData, isLoading=$isLoading)"
+                )
+                return@derivedStateOf false
             }
+
+            val layoutInfo = listState.layoutInfo
+            val totalItemsCount = layoutInfo.totalItemsCount
+            val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+            val result = lastVisibleItemIndex >= totalItemsCount - buffer
+            Log.d(
+                "CargoList",
+                "shouldLoadMore: $result (lastVisibleItemIndex=$lastVisibleItemIndex, totalItemsCount=$totalItemsCount)"
+            )
+            result
         }
     }
 
     LaunchedEffect(listState) {
         snapshotFlow { shouldLoadMore.value }
             .distinctUntilChanged()
-            .debounce(300) // جلوگیری از اجرای مکرر بارگذاری
+            .debounce(300)
             .filter { it }
-            .collect { loadMoreItems() }
-    }
-
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(20.dp)
-            .wrapContentHeight(),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        items(list.items) { item ->
-            CargoListItem(
-                item = item,
-                onClick = onClick,
-                onCancelCargoTextBtnClick = onCancelCargoTextBtnClick,
-            )
-        }
-
-        // آیتم بارگذاری در انتهای لیست
-        if (isLoading && hasMoreData) {
-            item {
-                repeat(10) {
-                    ShimmerCargoListItem()
-                }
+            .collect {
+                Log.d("CargoList", "Load more triggered")
+                loadMoreItems()
             }
-        }
     }
 }
-
 
 @Preview(showBackground = true, heightDp = 600)
 @Composable
@@ -96,7 +104,7 @@ fun CargoListPreView() {
             list = CargoResponseListMockData.MOCK_DATA,
             isLoading = false,
             hasMoreData = true,
-            onClick = {},
+            onItemClick = {},
             loadMoreItems = {},
             onCancelCargoTextBtnClick = {},
 
@@ -113,7 +121,7 @@ fun CargoListPreView_IsLoading_TRUE() {
             list = CargoResponseListMockData.MOCK_DATA,
             isLoading = true,
             hasMoreData = false,
-            onClick = {},
+            onItemClick = {},
             loadMoreItems = {},
             onCancelCargoTextBtnClick = {}
         )

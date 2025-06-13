@@ -36,10 +36,7 @@ import com.valentinilk.shimmer.shimmer
 import net.taraabar.challengecode.R
 import net.taraabar.challengecode.data.remote.model.response.CargoResponse
 import net.taraabar.challengecode.data.remote.model.response.CargoResponseListMockData
-import net.taraabar.designsystem.utils.CANCEL_CARGO
 import net.taraabar.challengecode.utils.CargoStatus
-import net.taraabar.designsystem.utils.DESTINATION
-import net.taraabar.designsystem.utils.ORIGIN
 import net.taraabar.designsystem.components.buttons.CustomTextButton
 import net.taraabar.designsystem.components.divider.LinearDivider
 import net.taraabar.designsystem.components.loading.ShimmerBox
@@ -52,7 +49,10 @@ import net.taraabar.designsystem.theme.TaraabarChallengeCodeTheme
 import net.taraabar.designsystem.theme.black
 import net.taraabar.designsystem.theme.getFontFamilyYekanBakh
 import net.taraabar.designsystem.theme.gray
+import net.taraabar.designsystem.utils.CANCEL_CARGO
+import net.taraabar.designsystem.utils.DESTINATION
 import net.taraabar.designsystem.utils.DividerType
+import net.taraabar.designsystem.utils.ORIGIN
 import net.taraabar.designsystem.utils.priceStyle
 import net.taraabar.designsystem.utils.toPersianNumber
 
@@ -60,7 +60,7 @@ import net.taraabar.designsystem.utils.toPersianNumber
 @Composable
 fun CargoListItem(
     item: CargoResponse,
-    onClick: (CargoResponse) -> Unit,
+    onItemClick: (CargoResponse) -> Unit,
     onCancelCargoTextBtnClick: () -> Unit,
 ) {
 
@@ -70,7 +70,7 @@ fun CargoListItem(
             .clip(RoundedCornerShape(12.dp))
             .clickable {
                 if (item.itemStatus == CargoStatus.NONE)
-                    onClick.invoke(item)
+                    onItemClick.invoke(item)
             },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
@@ -395,7 +395,7 @@ fun CargoListItemPreView() {
     TaraabarChallengeCodeTheme {
         CargoListItem(
             item = CargoResponseListMockData.MOCK_DATA.items.first(),
-            onClick = {},
+            onItemClick = {},
             onCancelCargoTextBtnClick = {}
         )
     }
@@ -408,7 +408,7 @@ fun CargoListItemPreView_StatusType_SELECTED() {
         CargoListItem(
             item = CargoResponseListMockData.MOCK_DATA.items.first()
                 .copy(itemStatus = CargoStatus.SELECTED),
-            onClick = {},
+            onItemClick = {},
             onCancelCargoTextBtnClick = {}
         )
     }
@@ -421,7 +421,7 @@ fun CargoListItemPreView_StatusType_LOCKED() {
         CargoListItem(
             item = CargoResponseListMockData.MOCK_DATA.items.first()
                 .copy(itemStatus = CargoStatus.LOCKED),
-            onClick = {},
+            onItemClick = {},
             onCancelCargoTextBtnClick = {}
         )
     }

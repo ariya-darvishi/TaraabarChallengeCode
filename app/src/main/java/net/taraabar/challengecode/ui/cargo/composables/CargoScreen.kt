@@ -24,7 +24,6 @@ import net.taraabar.challengecode.data.remote.model.response.CargoResponseList
 import net.taraabar.challengecode.data.remote.model.response.CargoResponseListMockData
 import net.taraabar.challengecode.ui.cargo.CargoViewModel
 import net.taraabar.challengecode.ui.cargo.composables.cargoDetailBottomSheet.CargoDetailBottomSheetContent
-import net.taraabar.designsystem.utils.CARGO_LIST
 import net.taraabar.designsystem.R
 import net.taraabar.designsystem.components.bottomSheet.TaraabarBottomSheet
 import net.taraabar.designsystem.components.icon.ClickableIconWithRippleShape
@@ -34,6 +33,7 @@ import net.taraabar.designsystem.theme.Neutral_900
 import net.taraabar.designsystem.theme.TaraabarChallengeCodeTheme
 import net.taraabar.designsystem.theme.background
 import net.taraabar.designsystem.theme.getFontFamilyYekanBakh
+import net.taraabar.designsystem.utils.CARGO_LIST
 
 @Composable
 fun CargoScreen(
@@ -79,6 +79,7 @@ fun CargoScreen(
         onCancelCargoTextBtnClick = events::onCancelCargoTextBtnClick,
         isLoadingCargoList = isLoadingCargoList,
         hasMoreData = hasMoreData,
+        loadMore = events::loadMore,
     )
 
 }
@@ -89,7 +90,8 @@ fun CargoScreenContent(
     isLoadingCargoList: Boolean,
     hasMoreData: Boolean,
     onCargoItemClick: (CargoResponse) -> Unit,
-    onCancelCargoTextBtnClick: () -> Unit
+    onCancelCargoTextBtnClick: () -> Unit,
+    loadMore: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -105,9 +107,9 @@ fun CargoScreenContent(
             list = cargoList,
             isLoading = isLoadingCargoList,
             hasMoreData = hasMoreData,
-            onClick = onCargoItemClick,
+            onItemClick = onCargoItemClick,
             onCancelCargoTextBtnClick = onCancelCargoTextBtnClick,
-            loadMoreItems = {}//events::loadMore
+            loadMoreItems = loadMore
         )
 
     }
@@ -157,6 +159,7 @@ fun CargoScreenPreview() {
             hasMoreData = false,
             onCargoItemClick = {},
             onCancelCargoTextBtnClick = {},
+            loadMore = {},
         )
     }
 }

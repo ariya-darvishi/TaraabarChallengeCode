@@ -1,6 +1,7 @@
 package net.taraabar.challengecode.ui.cargo
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,8 +14,8 @@ import net.taraabar.challengecode.data.remote.model.response.CargoResponse
 import net.taraabar.challengecode.data.remote.model.response.CargoResponseList
 import net.taraabar.challengecode.data.repository.ITaraabarRepository
 import net.taraabar.challengecode.utils.CargoStatus
-import net.taraabar.designsystem.utils.PAGE_MAX_SIZE
 import net.taraabar.challengecode.utils.updateSelectionStatus
+import net.taraabar.designsystem.utils.PAGE_MAX_SIZE
 import net.taraabar.network.states.apiResultCollector
 import javax.inject.Inject
 
@@ -22,7 +23,6 @@ import javax.inject.Inject
 @HiltViewModel
 class CargoViewModel @Inject constructor(
     private val repository: ITaraabarRepository,
-    @ApplicationContext private val context: Context,
 ) : ViewModel() {
 
     private val _cargoList = MutableStateFlow(CargoResponseList(emptyList()))
@@ -34,15 +34,24 @@ class CargoViewModel @Inject constructor(
     private var _isLoadingData = MutableStateFlow(false)
     private var _hasMoreData = MutableStateFlow(true)
 
+    private var _fullList = MutableStateFlow(CargoResponseList(emptyList()))
+
+    private val _currentLoadedList = MutableStateFlow(CargoResponseList(emptyList()))
+
+
+    private var currentPage = 0
+
 
     val states = CargoStateHolder(
         cargoList = _cargoList.asStateFlow(),
+        fullList = _fullList.asStateFlow(),
         currentCargoSelected = _currentCargoSelected.asStateFlow(),
         isLoadingCargoList = _isLoadingCargoList.asStateFlow(),
         isLoadingCargoItemDetail = _isLoadingCargoDetail.asStateFlow(),
         showCargoDetailBottomSheet = _showCargoDetailBottomSheet.asStateFlow(),
         isLoadingData = _isLoadingData.asStateFlow(),
         hasMoreData = _hasMoreData.asStateFlow(),
+        currentLoadedList = _currentLoadedList.asStateFlow(),
     )
 
     val events = object : CargoEvents {
@@ -51,7 +60,7 @@ class CargoViewModel @Inject constructor(
             viewModelScope.launch {
                 _isLoadingCargoList.value = true
                 delay(2000)
-                getShipmentList()
+                getCargoList()
             }
 
         }
@@ -68,18 +77,8 @@ class CargoViewModel @Inject constructor(
         }
 
         override fun onAcceptCargoBtnClick() {
-
-//            _currentShipmentItemSelected.value = _currentShipmentItemSelected.value.copy(itemStatus = ShipmentItemStatus.SELECTED)
-
-            /*            val updatedList = _shipmentList.value.items.map {
-                            if (it == _currentShipmentItemSelected.value) {
-                                it.copy(itemStatus = ShipmentItemStatus.SELECTED)
-                            } else {
-                                it.copy(itemStatus = ShipmentItemStatus.LOCKED)
-                            }
-                        }*/
-
             _cargoList.value = _cargoList.value.updateSelectionStatus(_currentCargoSelected.value)
+            _fullList.value = _fullList.value.updateSelectionStatus(_currentCargoSelected.value)
 
             this@CargoViewModel.onDismissBottomSheet()
         }
@@ -93,34 +92,97 @@ class CargoViewModel @Inject constructor(
             val updatedList = _cargoList.value.items.map {
                 it.copy(itemStatus = CargoStatus.NONE)
             }
+            val updatedListMoreLoad = _fullList.value.items.map {
+                it.copy(itemStatus = CargoStatus.NONE)
+            }
             _cargoList.value = CargoResponseList(updatedList)
+            _fullList.value = CargoResponseList(updatedListMoreLoad)
 
         }
 
         override fun loadMore() {
-            getShipmentList()
+            Log.d("CargoList", "events.loadMore called")
+            loadNextPage()
         }
 
     }
 
 
-    fun getShipmentList() {
-        if (_isLoadingData.value || !_hasMoreData.value) return
+    fun getCargoList() {
+        viewModelScope.launch {
+            _isLoadingData.value = true
+            Log.d("CargoList", "Starting getCargoList")
+
+            try {
+                repository.getMockCargoList()
+                    .apiResultCollector(states.getCargoListApiCallState) { data ->
+                        if (data.isNotEmpty()) {
+                            _fullList.value = CargoResponseList(data)
+                            _cargoList.value =
+                                CargoResponseList(items = _fullList.value.items.take(PAGE_MAX_SIZE))
+                            currentPage = 1
+                            _hasMoreData.value = _fullList.value.items.size > PAGE_MAX_SIZE
+                            Log.d(
+                                "CargoList",
+                                "getCargoList success: fullList.size=${_fullList.value.items.size}, cargoList.size=${_cargoList.value.items.size}, hasMoreData=${_hasMoreData.value}"
+                            )
+                        } else {
+                            _hasMoreData.value = false
+                            Log.d("CargoList", "getCargoList: No data received")
+                        }
+                    }
+            } catch (e: Exception) {
+                Log.e("CargoList", "Error in getCargoList: ${e.message}")
+            } finally {
+                _isLoadingData.value = false
+                Log.d("CargoList", "getCargoList finished: isLoading=${_isLoadingData.value}")
+            }
+        }
+    }
+
+    fun loadNextPage() {
+        if (_isLoadingData.value || !_hasMoreData.value) {
+            Log.d(
+                "CargoList",
+                "loadNextPage skipped: isLoading=${_isLoadingData.value}, hasMoreData=${_hasMoreData.value}"
+            )
+            return
+        }
 
         viewModelScope.launch {
             _isLoadingData.value = true
-            repository.getMockCargoList()
-                .apiResultCollector(states.getCargoListApiCallState) { newData ->
-                    if (newData.isEmpty() || newData.size < PAGE_MAX_SIZE) {
-                        _hasMoreData.value = false
-                    }
-                    _cargoList.value = CargoResponseList(_cargoList.value.items + newData)
-                    _isLoadingData.value = false
+            Log.d("CargoList", "Starting loadNextPage: currentPage=$currentPage")
+
+            try {
+                delay(2000)
+
+                val startIndex = currentPage * PAGE_MAX_SIZE
+                val nextItems = _fullList.value.items.drop(startIndex).take(PAGE_MAX_SIZE)
+                Log.d(
+                    "CargoList",
+                    "Loading next page: startIndex=$startIndex, nextItems.size=${nextItems.size}"
+                )
+
+                if (nextItems.isNotEmpty()) {
+                    _cargoList.value = CargoResponseList(items = _cargoList.value.items + nextItems)
+                    currentPage++
+                    _hasMoreData.value = startIndex + nextItems.size < _fullList.value.items.size
+                    Log.d(
+                        "CargoList",
+                        "Loaded next page: new list size=${_cargoList.value.items.size}, hasMoreData=${_hasMoreData.value}"
+                    )
+                } else {
+                    _hasMoreData.value = false
+                    Log.d("CargoList", "No more items to load")
                 }
+            } catch (e: Exception) {
+                Log.e("CargoList", "Error in loadNextPage: ${e.message}")
+            } finally {
+                _isLoadingData.value = false
+                Log.d("CargoList", "loadNextPage finished: isLoading=${_isLoadingData.value}")
+            }
         }
-
     }
-
 
     private fun onDismissBottomSheet() {
         _showCargoDetailBottomSheet.value = false
