@@ -83,28 +83,28 @@ val provincesAndCapitals = listOf(
 
 
 object CargoResponseListMockData {
-    private val cargoType = listOf(
-        "برنج",
-        "شیشه",
-        "فرش",
-        "شوینده",
-        "سیمان",
-        "غذا",
-        "حبوبات",
-        "لباس",
-        "ضایعات ساختمانی",
-        "لوازم خانگی",
-        "میوه",
-        "کفش"
-    ).random()
-    private val weightUnits = listOf("کیلوگرم", "تن").random()
-    private val packagingType = listOf("کارتن", "پالت", "کانتینر").random()
-    private val loadingDate = "۱۴۰۴-۰۳-${(10..30).random()}"
 
     val MOCK_DATA = CargoResponseList(
         items = List(Random.nextInt(60, 210)) {
-            val amount = (500_000..5_000_000).random().toString()
 
+            val amount = (500_000..5_000_000).random().toString()
+            val weightUnits = listOf("کیلوگرم", "تن").random()
+            val packagingType = listOf("کارتن", "پالت", "کانتینر").random()
+            val loadingDate = "۱۴۰۴-۰۳-${(10..30).random()}"
+            val cargoType = listOf(
+                "برنج",
+                "شیشه",
+                "فرش",
+                "شوینده",
+                "سیمان",
+                "غذا",
+                "حبوبات",
+                "لباس",
+                "ضایعات ساختمانی",
+                "لوازم خانگی",
+                "میوه",
+                "کفش"
+            ).random()
 
             val (originProvince, originCity) = provincesAndCapitals.random()
             var (destinationProvince, destinationCity) = provincesAndCapitals.random()

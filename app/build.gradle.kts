@@ -31,6 +31,12 @@ android {
                 "TaraabarServiceURL",
                 "\"https://taraabar-test.net/\""
             )
+            resValue(
+                "string",
+                "app_name",
+                "\"Taraabar_AriyaDarvishi_Debug_V${project.android.defaultConfig.versionName}\""
+            )
+
         }
         release {
 
@@ -41,6 +47,11 @@ android {
                 "\"https://taraabar.net/\""
             )
             isMinifyEnabled = false
+            resValue(
+                "string",
+                "app_name",
+                "\"Taraabar_AriyaDarvishi_Release_V${project.android.defaultConfig.versionName}\""
+            )
         }
     }
 

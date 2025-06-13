@@ -131,7 +131,7 @@ fun SelectedCargoLabelLayout(
 
         ) {
             Text(
-                text = "بار ${item.destinationProvince} به ${item.originProvince} انتخاب شده است",
+                text = "بار ${item.originProvince} به ${item.destinationProvince} انتخاب شده است",
                 fontSize = 12.sp,
                 lineHeight = 16.sp,
                 fontWeight = FontWeight.Medium,
