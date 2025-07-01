@@ -2,8 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-//    alias(libs.plugins.ksp)
-    alias(libs.plugins.kapt)
+    alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
 
 }
@@ -70,13 +69,13 @@ android {
         jvmTarget = "21"
     }
 
-//    sourceSets.configureEach {
-//        kotlin.srcDir(layout.buildDirectory.dir("generated/ksp/$name/kotlin").get().asFile)
-//    }
-//    ksp {
-//        arg("KSP_INCREMENTAL", "false")
-//        arg("KSP_LOG_LEVEL", "DEBUG")
-//    }
+    sourceSets.configureEach {
+        kotlin.srcDir(layout.buildDirectory.dir("generated/ksp/$name/kotlin").get().asFile)
+    }
+    ksp {
+        arg("KSP_INCREMENTAL", "false")
+        arg("KSP_LOG_LEVEL", "DEBUG")
+    }
 }
 
 dependencies {
@@ -111,8 +110,7 @@ dependencies {
 
     //di
     implementation(libs.hilt)
-//    ksp(libs.hilt.compiler)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
     //retrofit
@@ -127,13 +125,16 @@ dependencies {
 
 
 }
-//tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-//    kotlinOptions {
-//        freeCompilerArgs += listOf(
-//            "-P",
-//            "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${layout.buildDirectory.get().asFile.absolutePath}/compose_metrics",
-//            "-P",
-//            "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${layout.buildDirectory.get().asFile.absolutePath}/compose_metrics"
-//        )
-//    }
-//}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    compilerOptions {
+        freeCompilerArgs.addAll(
+            listOf(
+                "-P",
+                "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${layout.buildDirectory.get().asFile.absolutePath}/compose_metrics",
+                "-P",
+                "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${layout.buildDirectory.get().asFile.absolutePath}/compose_metrics"
+            )
+        )
+    }
+}
