@@ -29,10 +29,10 @@ fun CargoDetailList(
                 ShimmerCargoDetailListItem()
             }
         } else {
-            list.items.forEachIndexed() { index, item ->
+            list.items.forEachIndexed { index, item ->
                 CargoDetailListItem(
                     item = item,
-                    showLine = if (index != list.items.size - 1) true else false,
+                    showLine = index != list.items.size - 1,
                 )
             }
         }
