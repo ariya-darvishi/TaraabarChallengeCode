@@ -69,8 +69,8 @@ object NetworkModule {
         ret.certificatePinner(
             CertificatePinner.Builder()
                 .add(
-                    "www.asiatech.ir",
-                    "sha256/8ffcfb370ae14b717ece76965227e1f49e13413835e5eca1437eaef10e4afb3c"
+                    "www.taraabar.net",
+                    "sha256/8f..."
                 )
                 .build()
         )
